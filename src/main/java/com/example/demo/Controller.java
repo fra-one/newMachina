@@ -9,6 +9,10 @@ public class Controller {
     public String page1(){  
         return"nice page1";  
     }  
+	@RequestMapping("/page2")  
+    public String page2(){  
+        return"nice page1";  
+    }  
     @RequestMapping("/")  
     public String home(){  
         return"nice home";  
