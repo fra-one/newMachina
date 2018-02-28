@@ -16,7 +16,7 @@ public class SpringBootJpaAloneSimple {
 	}
 	
 	@Bean
-	public CommandLineRunner demo(CurrencyRepository repository) {
+	public CommandLineRunner demo(CurrencyRepository repository) { // CREATE 
 		return (args) -> {
 			repository.save(new Currency("BTC", 12.1 ,10));
 		};
