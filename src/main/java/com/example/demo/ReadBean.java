@@ -1,4 +1,9 @@
 package com.example.demo;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 /**
@@ -8,7 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(schema="PUBLIC",name="currency")
 public class ReadBean {
+	
+	private String currencyName;
 	@JsonProperty("BTC")
 	private Double BTC;
 	@JsonProperty("USD")
@@ -25,27 +34,44 @@ public class ReadBean {
 		this.EUR = EUR;
 	}
 	
+	@Id
+	@Column(name="currency_name")
+	public String getCurrencyName() {
+		return currencyName;
+	}
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
+	}
+	@Column(name="value")
 	public Double  getBTC() {
 		return BTC;
 	}
 	public void setBTC(Double BTC) {
 		this.BTC = BTC;
 	}
+	@Column(name="in_usd")
 	public Double  getUSD() {
 		return USD;
 	}
 	public void setUSD(Double  USD) {
 		this.USD = USD;
 	}
+	@Column(name="in_eur")
 	public Double  getEUR() {
 		return EUR;
 	}
 	public void setEUR(Double  EUR) {
 		this.EUR = EUR;
 	}
+	
+	
+	public String toStringPartial() {
+		return "ReadBean [BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
+	}
+
 	@Override
 	public String toString() {
-		return "ReadBean [BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
+		return "ReadBean [currencyName=" + currencyName + ", BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
 	}
 	
 	
