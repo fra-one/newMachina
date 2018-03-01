@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -138,13 +139,14 @@ public class Controller {
 		explanation+="I nomi delle valute accettate sono: BTC USD EUR ETH LTC ETC ";
 		
 		//explanation autentication
-		
-		explanation+="||| Digita: http:/localhost:8080/dbReadAll per ricevere una veloce rappresentazione delle valute memorizzate";
+		explanation+="||| comment @ComponentScan({\"com.example.demo\",\"com.example.security2\"}) for disable Task1 EXTRA";
+		explanation+="||| Digita: http:/localhost:8080/logmeout per effettuare il log out";
+		explanation+="||| Digita: http:/localhost:8080/currencies per ricevere una veloce rappresentazione delle valute memorizzate";
 		return explanation;  
 	}  
 	
 	// Get All crypto currency
-		@RequestMapping("/dbReadAll") //@GetMapping  //localhost:8080/currencies
+		@RequestMapping("/currencies") //@GetMapping  //localhost:8080/currencies
 		public List<ReadBean> getAllNotes() {
 		    return readBeanRepository.findAll();
 		}
