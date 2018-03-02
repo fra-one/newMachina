@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.cryptoconverter.api;
 
 /**
  * class used to contain information for web communication over currency 
@@ -6,10 +6,10 @@ package com.example.demo;
  * @author User
  *
  */
-public class MyBean {
+public class ConversionResult {
 	private final double amount;
 	
-	public MyBean(double amount) {
+	public ConversionResult(double amount) {
 		this.amount=amount;
 	}
 	

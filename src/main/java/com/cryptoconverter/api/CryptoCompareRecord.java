@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.cryptoconverter.api;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,15 +7,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 /**
- * class used to contain information from RESTapi from  www.cryptocompare.com
- * Leave meta name for learning over legibility
+ * class used to contain information from www.cryptocompare.com in the DB
  * @author User
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(schema="PUBLIC",name="currency")
-public class ReadBean {
+public class CryptoCompareRecord {
 	
 	private String currencyName;
 	@JsonProperty("BTC")
@@ -25,9 +24,9 @@ public class ReadBean {
 	@JsonProperty("EUR")
 	private Double  EUR;
 	
-	public ReadBean() {super();}
+	public CryptoCompareRecord() {super();}
 	
-	public ReadBean(Double BTC, Double USD, Double  EUR) {
+	public CryptoCompareRecord(Double BTC, Double USD, Double  EUR) {
 		super();
 		this.BTC = BTC;
 		this.USD = USD;
@@ -66,12 +65,12 @@ public class ReadBean {
 	
 	
 	public String toStringPartial() {
-		return "ReadBean [BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
+		return "CryptoCompareRecord [BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
 	}
 
 	@Override
 	public String toString() {
-		return "ReadBean [currencyName=" + currencyName + ", BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
+		return "CryptoCompareRecord [currencyName=" + currencyName + ", BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
 	}
 	
 	

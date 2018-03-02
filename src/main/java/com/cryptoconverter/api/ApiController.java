@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.cryptoconverter.api;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -6,40 +6,36 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.jpa.Currency;
-import com.example.jpa.CurrencyRepository;
+
 
 @RestController  
-public class Controller {
+public class ApiController {
 	@Autowired
 	RestTemplate restTemplate;
 	@Autowired
-	private ReadBeanRepository readBeanRepository;
+	private CryptoCompareRepository cryptoCompareRepository;
 
 	//---- TASK 1 & 2 of the project ----//
-	//Update DB with record delete and record create
 	
+	
+	//Update DB with a selection of Crypto Currencies to store
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	@Scheduled(fixedDelay = 10000)
-	public void scheduleFixedDelayTask() {
-		System.out.println("Regular task OVER JPA performed at "+ dateFormat.format(new Date()));
+	public void cryptoCompareRepositoryUpdate() {
+		System.out.println("cryptoCompareRepositoryUpdate at "+ dateFormat.format(new Date()));
 		getStore("BTC");
-		getStore("ETH"); //extra
-		getStore("LTC"); //extra
-		getStore("ETC"); //extra
+		getStore("ETH"); //extra crypto currency
+		getStore("LTC"); //extra crypto currency
+		getStore("ETC"); //extra crypto currency
 	}
 	@Bean 
 	public RestTemplate restTemplate() {
@@ -54,74 +50,74 @@ public class Controller {
 		currencyName=currencyName.trim().toUpperCase();
 		RestTemplate restTemplate = new RestTemplate();
 		
-		ReadBean newReadBean = restTemplate.getForObject("https://min-api.cryptocompare.com/data/price?fsym="+currencyName+"&tsyms="+currencyName+",USD,EUR", ReadBean.class);
-		newReadBean.setCurrencyName(currencyName);
-		newReadBean.setBTC(1.0); 
+		CryptoCompareRecord cryptoCompareRecord = restTemplate.getForObject("https://min-api.cryptocompare.com/data/price?fsym="+currencyName+"&tsyms="+currencyName+",USD,EUR", CryptoCompareRecord.class);
+		cryptoCompareRecord.setCurrencyName(currencyName);
+		cryptoCompareRecord.setBTC(1.0); 
 		//DELETE
-		ReadBean oldReadBean =readBeanRepository.findOne(newReadBean.getCurrencyName());
-	    if(oldReadBean != null) {
-	        readBeanRepository.delete(oldReadBean);
+		CryptoCompareRecord oldCryptoCompareRecord =cryptoCompareRepository.findOne(cryptoCompareRecord.getCurrencyName());
+	    if(oldCryptoCompareRecord != null) {
+	        cryptoCompareRepository.delete(oldCryptoCompareRecord);
 	    }
 		//SAVE
-	    readBeanRepository.save(newReadBean);
-		return newReadBean.toString();
+	    cryptoCompareRepository.save(cryptoCompareRecord);
+		return cryptoCompareRecord.toString();
 	}
 	
 	//---- TASK 3 of the project ----// 
 	//conversion over currency with specific Json return type 
-	@GetMapping("/task3/{SVAL}/{SCOD}/{FCOD}")   //http://localhost:8080/task3/25/BTC/USD
-	public  @ResponseBody MyBean  doTask3(	@PathVariable(value = "SVAL", required  = true) Double startValue,
-											@PathVariable(value = "SCOD", required  = true) String startingName,
-											@PathVariable(value = "FCOD", required  = true) String finalName) {
+	@GetMapping("/convert/{startValue}/{startingName}/{finalName}")   //http://localhost:8080/task3/25/BTC/USD
+	public  @ResponseBody ConversionResult  doTask3(	@PathVariable(value = "startValue", required  = true) Double startValue,
+											@PathVariable(value = "startingName", required  = true) String startingName,
+											@PathVariable(value = "finalName", required  = true) String finalName) {
 		//same fast control over input 
 		startingName=startingName.trim().toUpperCase();
 		finalName=finalName.trim().toUpperCase();
 			
 		//-- conversion start with the same start name and final name
 		if(startingName.equals(finalName)) {
-			return  new MyBean(startValue);
+			return  new ConversionResult(startValue);
 		}
 		
 		//-- conversion start from USD or EUR to CRYPTO CURRENCY or USD or EUR
 		if(startingName.equals("EUR")) {
 			if(finalName.equals("USD")) {
-				ReadBean cange =getBeanInternal("BTC");
-				return new MyBean(startValue/cange.getEUR()*cange.getUSD());  // 1/(1 BTC in €) * startValue * (1 BTC in $)
+				CryptoCompareRecord cange =getCryptoRecordFromRepo("BTC");
+				return new ConversionResult(startValue/cange.getEUR()*cange.getUSD());  // 1/(1 BTC in €) * startValue * (1 BTC in $)
 			}else {
-				return new MyBean(getBeanInternal(finalName).getEUR()/startValue);
+				return new ConversionResult(getCryptoRecordFromRepo(finalName).getEUR()/startValue);
 			}
 		}
 		if(startingName.equals("USD")) {
 			if(finalName.equals("EUR")) {
-				ReadBean cange =getBeanInternal("BTC");
-				return new MyBean(startValue/cange.getUSD()*cange.getEUR());  // 1/(1 BTC in $) * startValue * (1 BTC in €)
+				CryptoCompareRecord cange =getCryptoRecordFromRepo("BTC");
+				return new ConversionResult(startValue/cange.getUSD()*cange.getEUR());  // 1/(1 BTC in $) * startValue * (1 BTC in €)
 			}else {
-				return new MyBean(getBeanInternal(finalName).getEUR()/startValue);
+				return new ConversionResult(getCryptoRecordFromRepo(finalName).getEUR()/startValue);
 			}
 		}
 		
 		//-- conversion start form CRYPTO CURRENCY to EUR or USD or CRYPO CURRENCY
-		ReadBean startingC =getBeanInternal(startingName);
+		CryptoCompareRecord startingC =getCryptoRecordFromRepo(startingName);
 		if(startingC!=null) {
 			if(finalName.equals("EUR")) {
-				return new MyBean(startingC.getEUR()*startValue);
+				return new ConversionResult(startingC.getEUR()*startValue);
 			}
 			if(finalName.equals("USD")) {
-				return new MyBean(startingC.getUSD()*startValue);
+				return new ConversionResult(startingC.getUSD()*startValue);
 			}
-			ReadBean finalC =getBeanInternal(finalName);
+			CryptoCompareRecord finalC =getCryptoRecordFromRepo(finalName);
 			if (finalC!=null) {
-				return new MyBean(startingC.getUSD()/finalC.getUSD()*startValue); // startValue* (value in $ start currency) / (value in $ final currency)
+				return new ConversionResult(startingC.getUSD()/finalC.getUSD()*startValue); // startValue* (value in $ start currency) / (value in $ final currency)
 			}
 		}
 		
 		// Return in not evaluate situation
-		return new MyBean(0);
+		return new ConversionResult(0);
 	}
 	
 	//method used internally for task3
-	private ReadBean getBeanInternal(String currencyName) {
-		ReadBean readBean = readBeanRepository.findOne(currencyName);
+	private CryptoCompareRecord getCryptoRecordFromRepo(String currencyName) {   // CRITICISM IN RETURNING NULL!!!!
+		CryptoCompareRecord readBean = cryptoCompareRepository.findOne(currencyName);
 	    if(readBean == null) {
 	    	 return null;
 	    }
@@ -147,15 +143,15 @@ public class Controller {
 	
 	// Get All crypto currency
 		@RequestMapping("/currencies") //@GetMapping  //localhost:8080/currencies
-		public List<ReadBean> getAllNotes() {
-		    return readBeanRepository.findAll();
+		public List<CryptoCompareRecord> getAllNotes() {
+		    return cryptoCompareRepository.findAll();
 		}
 	
 	//Print a message from a consuming service 
 	@GetMapping("/simpleApiRead") 
 	public String getAvailableOperations() {
 		RestTemplate restTemplate = new RestTemplate();
-		ReadBean readBean = restTemplate.getForObject("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR", ReadBean.class);
+		CryptoCompareRecord readBean = restTemplate.getForObject("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR", CryptoCompareRecord.class);
 		return readBean.toString();
 	}
 	

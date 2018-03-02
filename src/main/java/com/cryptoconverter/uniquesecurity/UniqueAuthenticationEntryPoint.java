@@ -1,4 +1,4 @@
-package com.example.security2;
+package com.cryptoconverter.uniquesecurity;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,9 +12,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
- 
-
+public class UniqueAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 	@Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx)
       throws IOException, ServletException {

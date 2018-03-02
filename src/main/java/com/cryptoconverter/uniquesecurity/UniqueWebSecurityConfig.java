@@ -1,4 +1,4 @@
-package com.example.security2;
+package com.cryptoconverter.uniquesecurity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,10 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class UniqueWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private MyBasicAuthenticationEntryPoint authEntryPoint;
+	private UniqueAuthenticationEntryPoint authEntryPoint;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

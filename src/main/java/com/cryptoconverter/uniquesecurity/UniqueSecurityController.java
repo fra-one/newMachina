@@ -1,4 +1,4 @@
-package com.example.security2;
+package com.cryptoconverter.uniquesecurity;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,20 +23,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @RestController  
 @Component
-public class Controller2 {
-
-	@RequestMapping(path="/user", method = RequestMethod.GET)
-	public ResponseEntity  listUser(){
-		return new ResponseEntity("ok", HttpStatus.OK);
-	}
-
-	@RequestMapping(path="/user/{id}", method = RequestMethod.GET)
-	public ResponseEntity  listUser(@PathVariable(value = "id") String id){
-		return new ResponseEntity(id, HttpStatus.OK);
-
-	}
-
-	@RequestMapping(value="/logmeout", method = RequestMethod.POST)
+public class UniqueSecurityController {
+	@RequestMapping(value="/logmeout")//logout method
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null){ 
@@ -45,9 +33,8 @@ public class Controller2 {
 		return "redirect:/login";
 	}
 
-
 	@Bean
-	public WebMvcConfigurer corsConfigurer() {
+	public WebMvcConfigurer corsConfigurer() { 
 		return new WebMvcConfigurerAdapter() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
@@ -55,5 +42,11 @@ public class Controller2 {
 				.allowedHeaders("*");
 			}
 		};
+	}
+	
+	//-- extra code for testing--//
+	@RequestMapping(path="/testProtection", method = RequestMethod.GET)
+	public ResponseEntity  listUser(){
+		return new ResponseEntity("ok", HttpStatus.OK);
 	}
 }
