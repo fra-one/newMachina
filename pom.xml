@@ -37,13 +37,6 @@
 		</dependency>
 
 
-		<!-- Quartz framework -->
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>1.8.6</version>
-		</dependency>
-
 		<!-- JPA framework -->
 		<dependency>
 			<groupId>com.h2database</groupId>

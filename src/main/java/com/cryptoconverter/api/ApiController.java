@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,12 +42,9 @@ public class ApiController {
 	public RestTemplate restTemplate() {
 	    return new RestTemplate();
 	}
-	@GetMapping("/store") //Rest call on store default record inside DB
-	public String getStore() {
-		return getStore("BTC");
-	}
-	@GetMapping("/store/NAME") //Rest call on specific default record inside DB
-	public String getStore(@RequestParam(value = "NAME", defaultValue = "BTC") String currencyName) {
+	
+	//@GetMapping("/store/NAME") //Rest call on specific default record inside DB
+	public String getStore( String currencyName) { //@RequestParam(value = "NAME", defaultValue = "BTC")
 		currencyName=currencyName.trim().toUpperCase();
 		RestTemplate restTemplate = new RestTemplate();
 		
@@ -142,13 +140,17 @@ public class ApiController {
 	}  
 	
 	// Get All crypto currency
-		@RequestMapping("/currencies") //@GetMapping  //localhost:8080/currencies
-		public List<CryptoCompareRecord> getAllNotes() {
+	@GetMapping(value="/currencies") //localhost:8080/currencies
+		public List<CryptoCompareRecord> getAllCurrencies() {
 		    return cryptoCompareRepository.findAll();
 		}
-	
+	// Get one specific crypto currency
+	@GetMapping(value="/currencies/{currencyName}") //localhost:8080/currencies
+		public CryptoCompareRecord getOneCurrency(@PathVariable(value = "currencyName", required  = true) String currencyName) {
+		    return getCryptoRecordFromRepo(currencyName);
+		}
 	//Print a message from a consuming service 
-	@GetMapping("/simpleApiRead") 
+	@GetMapping(value="/simpleApiRead") 
 	public String getAvailableOperations() {
 		RestTemplate restTemplate = new RestTemplate();
 		CryptoCompareRecord readBean = restTemplate.getForObject("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR", CryptoCompareRecord.class);
