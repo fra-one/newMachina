@@ -1,8 +1,7 @@
-package com.cryptoconverter.api;
+package com.cryptoconverter.api.domain;
 
 /**
- * class used to contain information for web communication over currency 
- * Leave meta name for learning over legibility
+ * web return class used to contain information for conversion (user request) between currencies
  * @author User
  *
  */

@@ -1,4 +1,4 @@
-package com.cryptoconverter.uniquesecurity;
+package com.cryptoconverter.api.application;
 
 import java.io.IOException;
 import java.io.PrintWriter;

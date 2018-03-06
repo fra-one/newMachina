@@ -1,34 +1,28 @@
-package com.cryptoconverter.api;
+package com.cryptoconverter.api.infrastructure;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- * class used to contain information from www.cryptocompare.com in the DB
+ * class used to contain information in the DB of cryptocurrencies conversion in  USD and EUR 
  * @author User
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(schema="PUBLIC",name="currency")
-public class CryptoCompareRecord {
+public class CryptoRecord {
 	
 	private String currencyName;
-	@JsonProperty("BTC")
-	private Double BTC;
-	@JsonProperty("USD")
 	private Double  USD;
-	@JsonProperty("EUR")
 	private Double  EUR;
 	
-	public CryptoCompareRecord() {super();}
+	public CryptoRecord() {super();}
 	
-	public CryptoCompareRecord(Double BTC, Double USD, Double  EUR) {
+	public CryptoRecord( Double USD, Double  EUR) {
 		super();
-		this.BTC = BTC;
 		this.USD = USD;
 		this.EUR = EUR;
 	}
@@ -41,13 +35,7 @@ public class CryptoCompareRecord {
 	public void setCurrencyName(String currencyName) {
 		this.currencyName = currencyName;
 	}
-	@Column(name="value")
-	public Double  getBTC() {
-		return BTC;
-	}
-	public void setBTC(Double BTC) {
-		this.BTC = BTC;
-	}
+
 	@Column(name="in_usd")
 	public Double  getUSD() {
 		return USD;
@@ -65,12 +53,12 @@ public class CryptoCompareRecord {
 	
 	
 	public String toStringPartial() {
-		return "CryptoCompareRecord [BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
+		return "CryptoRecord [USD= " + USD + ", EUR=" + EUR + "]";
 	}
 
 	@Override
 	public String toString() {
-		return "CryptoCompareRecord [currencyName=" + currencyName + ", BTC=" + BTC + ", USD=" + USD + ", EUR=" + EUR + "]";
+		return "CryptoRecord [currencyName=" + currencyName +  ", USD=" + USD + ", EUR=" + EUR + "]";
 	}
 	
 	
