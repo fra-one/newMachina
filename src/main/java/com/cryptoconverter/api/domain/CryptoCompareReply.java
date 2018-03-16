@@ -1,5 +1,4 @@
 package com.cryptoconverter.api.domain;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 /**
@@ -9,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CryptoCompareReply {
-	
 	private String currencyName;
 	@JsonProperty("USD")
 	private Double  USD;
@@ -17,14 +15,12 @@ public class CryptoCompareReply {
 	private Double  EUR;
 	
 	public CryptoCompareReply() {super();}
-	
 	public CryptoCompareReply( Double USD, Double  EUR) { 
 		super();
 		this.USD = USD;
 		this.EUR = EUR;
 	}
 	
-
 	public String getCurrencyName() {
 		return currencyName;
 	}
@@ -45,7 +41,6 @@ public class CryptoCompareReply {
 	public void setEUR(Double  EUR) {
 		this.EUR = EUR;
 	}
-	
 	
 	public String toStringPartial() {
 		return "CryptoCompareReply [USD=" + USD + ", EUR=" + EUR + "]";

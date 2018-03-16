@@ -1,8 +1,6 @@
 package com.cryptoconverter.api.application;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,13 +11,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * Application layer for bonus 1 Behavior of the application  ( 1 connection over user name and password)
+ * Business Logic for Controller (presentation layer) for  1 connection over user name and password
+ * [bonus 1 Behavior of the application]
  * @author User
  *
  */
 @Component
 public class UniqueSecurityLogic {
-
+	//logout method
 	public static boolean logOutUser(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null){ 

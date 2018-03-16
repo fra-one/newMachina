@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cryptoconverter.api.application.UniqueSecurityLogic;
 
 /**
- * class used for define unique security Behavior
+ * Application Controller with the unique user security functionality of the app (log out, test)  
+ * [used for define the behavior of the bonus 1 project specifications]
  * @author User
  *
  */
 @RestController  
 public class UniqueSecurityController {
-	@RequestMapping(value="/logmeout")//logout method
+	//---- EXTRA CODE use for testing ----//
+	//logout method
+	@RequestMapping(value="/logmeout")
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
 		if(UniqueSecurityLogic.logOutUser(request,response)) {
 			return "redirect:/login";
@@ -27,9 +30,7 @@ public class UniqueSecurityController {
 		else { return"redirect:/problemLogout";}
 	}
 
-
-
-	//-- extra code for testing--//
+	//connection test
 	@RequestMapping(path="/testProtection", method = RequestMethod.GET)
 	public ResponseEntity<String>  testProtecion(){
 		return new ResponseEntity<String>("ok", HttpStatus.OK);

@@ -1,25 +1,19 @@
 package com.cryptoconverter.api.application;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
 import com.cryptoconverter.api.domain.ConversionResult;
 import com.cryptoconverter.api.domain.CryptoCompareReply;
 import com.cryptoconverter.api.domain.DataConverter;
 import com.cryptoconverter.api.infrastructure.CryptoRecord;
 import com.cryptoconverter.api.infrastructure.CryptoRepository;
-
 /**
  * Application layer for basic Behavior of the application
  * @author User
  *
  */
-
-
 @Component
 public class CryptoConverterLogic {
 	@Autowired
@@ -31,16 +25,11 @@ public class CryptoConverterLogic {
 
 	// take from  cryptocompare.com a specific currency record and store it in persistence infrastructure   
 	public String updateCryptoRecord( String currencyName) { 
-		
 		currencyName=currencyName.trim().toUpperCase();
 		RestTemplate restTemplate = new RestTemplate();
-		
-
 		CryptoCompareReply cryptoCompareReply = restTemplate.getForObject("https://min-api.cryptocompare.com/data/price?fsym="+currencyName+"&tsyms="+currencyName+",USD,EUR", CryptoCompareReply.class);
 		cryptoCompareReply.setCurrencyName(currencyName);
 		CryptoRecord cryptoRecord= DataConverter.cryptoCompareReply2CryptoRecord(cryptoCompareReply);
-	
-		
 		//DELETE
 		CryptoRecord oldCryptoRecord =cryptoRepository.findOne(cryptoRecord.getCurrencyName());
 		if(oldCryptoRecord != null) {
@@ -102,7 +91,7 @@ public class CryptoConverterLogic {
 		}
 		return readBean;
 	}
-	//method used for obtein all the records form Crypto Repository
+	//method used for obtain all the records form Crypto Repository
 	public  List<CryptoRecord> getCryptoRecordsFromRepo() {   // CRITICISM IN RETURNING NULL!!!!
 		return cryptoRepository.findAll();
 	}

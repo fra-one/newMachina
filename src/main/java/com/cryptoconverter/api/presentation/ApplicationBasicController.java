@@ -1,6 +1,4 @@
 package com.cryptoconverter.api.presentation;
-
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import com.cryptoconverter.api.application.CryptoConverterLogic;
 import com.cryptoconverter.api.domain.ConversionResult;
 import com.cryptoconverter.api.infrastructure.CryptoRecord;
-
-
-
 /**
- * Controller with the the possibility of convert currencies 
- * Basic = is used for the core behavior of the project specifications
+ * Application Controller with the basic functionality of the app (convert currencies,help, test)  
+ * [Basic = word used for define the core behavior of the project specifications]
  * @author User
  *
  */
@@ -38,20 +33,22 @@ public class ApplicationBasicController {
 		return cryptoLogic.makeConversion(startValue,startingName,finalName);
 	}
 	
+	
 	//---- EXTRA CODE use for testing and rapid access ----//
 	//message for help or home call
 	@RequestMapping(value={"/help","/"})  
 	public String getHelp(){  
 		String explanation ="";
-		explanation+="MEssaggio usato come help-home |||";
-		explanation+="Task3 digita: http:/localhost:8080/task3/1/BTC/USD per sapere quanto vale 1 BTC in DOLLARI. ";
+		explanation+="Messaggio usato come help-home |||";
+		explanation+="Task3 digita: http:/localhost:8080/convert/1/BTC/USD per sapere quanto vale 1 BTC in DOLLARI. ";
 		explanation+="Puoi decidere di cambiare valore e di cambiare le valute nell'ordine che preferisci. ";
 		explanation+="I nomi delle valute accettate sono: BTC USD EUR ETH LTC ETC ";
-		
 		//explanation autentication
-		explanation+="||| comment @ComponentScan({\"com.example.demo\",\"com.example.security2\"}) for disable Task1 EXTRA";
 		explanation+="||| Digita: http:/localhost:8080/logmeout per effettuare il log out";
-		explanation+="||| Digita: http:/localhost:8080/currencies per ricevere una veloce rappresentazione delle valute memorizzate";
+		explanation+="||| Digita: http:/localhost:8080/user/luca/123/user per aggiornare l'utente luca con password 123 e ruolo user ";
+		//test
+		explanation+="||| Digita: http:/localhost:8080/provaidertest per leggere il risultato di una chiamata fatta a cryptocompare";
+		explanation+="||| Digita: http:/localhost:8080/currencies o http:/localhost:8080/currencies/BTC per ricevere una veloce rappresentazione delle valute/a memorizzate";
 		return explanation;  
 	}  
 	// Get All cryptocurrency
@@ -64,8 +61,8 @@ public class ApplicationBasicController {
 		public CryptoRecord getOneCurrency(@PathVariable(value = "currencyName", required  = true) String currencyName) {
 		    return cryptoLogic.getCryptoRecordFromRepo(currencyName);
 		}
-	//Print a message from a consuming service // 
-	@GetMapping(value="/provaidertest") 
+	//Print a message from a consuming service  
+	@GetMapping(value="/provaidertest")  //localhost:8080/provaidertest
 	public String testCryptoCompareWebSite() {
 		RestTemplate restTemplate = new RestTemplate();
 		CryptoRecord readBean = restTemplate.getForObject("https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR", CryptoRecord.class);

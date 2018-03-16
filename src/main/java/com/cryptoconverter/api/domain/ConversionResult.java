@@ -1,7 +1,7 @@
 package com.cryptoconverter.api.domain;
-
 /**
- * web return class used to contain information for conversion (user request) between currencies
+ * class used to contain information for conversion between currencies 
+ * (user request of conversation over our service return this type of return)
  * @author User
  *
  */

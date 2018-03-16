@@ -3,24 +3,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-
 /**
- * class used to contain information in the DB of cryptocurrencies conversion in  USD and EUR 
+ * class used to contain information  of cryptocurrencies in the DB, every currency with a conversion in  USD and EUR 
  * @author User
  *
  */
-//@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(schema="PUBLIC",name="currency")
 public class CryptoRecord {
-	
 	private String currencyName;
 	private Double  USD;
 	private Double  EUR;
 	
 	public CryptoRecord() {super();}
-	
 	public CryptoRecord( Double USD, Double  EUR) {
 		super();
 		this.USD = USD;
@@ -43,6 +38,7 @@ public class CryptoRecord {
 	public void setUSD(Double  USD) {
 		this.USD = USD;
 	}
+	
 	@Column(name="in_eur")
 	public Double  getEUR() {
 		return EUR;
@@ -50,17 +46,12 @@ public class CryptoRecord {
 	public void setEUR(Double  EUR) {
 		this.EUR = EUR;
 	}
-	
-	
-	public String toStringPartial() {
-		return "CryptoRecord [USD= " + USD + ", EUR=" + EUR + "]";
-	}
-
+		
 	@Override
 	public String toString() {
 		return "CryptoRecord [currencyName=" + currencyName +  ", USD=" + USD + ", EUR=" + EUR + "]";
 	}
-	
-	
-	
+	public String toStringPartial() {
+		return "CryptoRecord [USD= " + USD + ", EUR=" + EUR + "]";
+	}
 }
